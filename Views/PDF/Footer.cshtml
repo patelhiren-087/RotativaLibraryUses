@@ -1,0 +1,91 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Title</title>
+    <script>
+         function setPageNumbers() {
+            /*
+            vars will have the following structure:
+
+            vars: {
+              page,
+              frompage,
+              topage,
+              webpage,
+              section,
+              subsection,
+              date,
+              isodate,
+              time,
+              title,
+              doctitle,
+              sitepage,
+              sitepages
+            }
+            */
+                    var vars = {};
+            var queryStringsFromUrl = document.location.search.substring(1).split('&');
+            for (var queryString in queryStringsFromUrl) {
+                if (queryStringsFromUrl.hasOwnProperty(queryString)) {
+                    var temp = queryStringsFromUrl[queryString].split('=', 2);
+                    vars[temp[0]] = decodeURI(temp[1]);
+                }
+            }
+
+            // Get the elements where page number and topage will be displayed
+            var element = document.getElementById('pageNumber');
+            var topageElement = document.getElementById('topageNumber');  // Make sure this element exists in your HTML
+
+            // Always start page number at 1
+            element.textContent = 1; // Force the page number to always be 1
+            // Display the topage number if available
+            if (vars.topage) {
+                topageElement.textContent = vars.topage;  // This will display the topage value
+            }
+
+            if (document.cookie.split(';').length === 2) {
+                var section = document.cookie.split(';')[0].split('=')[1];
+
+                if (vars.section !== section) {
+                  document.cookie = 'currentSection=' + vars.section;
+                  document.cookie = 'startedAt=' + vars.page;
+                }
+
+                // startedAt is the page on which a section started
+                var startedAt = parseInt(document.cookie.split(';')[1].split('=')[1]);
+                element.textContent = vars.page - startedAt + 1;
+              } else {
+                document.cookie = 'currentSection=' + vars.section;
+                document.cookie = 'startedAt=' + vars.page;
+                element.textContent = 1;
+              }
+        }
+    </script>
+    <style>
+        h1 {
+            background-color: cadetblue;
+            text-align: center;
+        }
+
+        .pageNumber {
+            margin: 0;
+            text-align: right;
+            padding-right: 31px;
+            border-top : 1px solid #000;
+        }
+    </style>
+</head>
+<body onload="setPageNumbers()">
+    <h1>This is Footer </h1>
+    <br>
+    <div>
+        <p class="pageNumber">Page <span id="pageNumber"></span> of <span id="topageNumber"></span></p>
+    </div>
+</body>
+</html>

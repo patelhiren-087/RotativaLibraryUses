@@ -1,0 +1,64 @@
+﻿@model PersonViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>PDF Generation</title>
+    <style>
+        body {
+            font-family: Helvetica, sans-serif;
+            table-layout: fixed;
+            width: 100%;
+            margin: auto;
+        }
+
+        p{
+            text-align: center;
+        }
+
+        table{
+            margin: auto;
+            width: 100%;
+        }
+
+        table tr td{
+            padding: 30px 0;
+            background-color: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+    <p>Name is : @Model.name</p>
+    <p>Age is : @Model.age</p>
+
+    <br>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th style="text-align: center">Row</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 1; i <= 20; i++)
+            {
+                <tr style="page-break-inside: avoid !important">
+                    <td style="text-align: center">Data @i</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <br>
+
+
+    @* You can use this button wherever you need in your application. *@
+    <a class="btn btn-success btn-sm" id="ViewPDF" href="@Url.Action("GeneratePdf", "Home")" target="_blank">
+        <i class="fas fa-eye"></i>Print PDF
+    </a>
+</body>
+</html>
